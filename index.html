@@ -29,13 +29,8 @@
             <option value="title_desc">Title (Z → A)</option>
           </select>
 
-          <button id="exportCsv" class="btn btn--primary" type="button">
-            Export CSV
-          </button>
-
-          <button id="toggleFilters" class="btn btn--ghost" type="button">
-            Filters
-          </button>
+          <button id="exportCsv" class="btn btn--primary" type="button">Export CSV</button>
+          <button id="toggleFilters" class="btn btn--ghost" type="button">Filters</button>
         </div>
       </div>
     </div>
@@ -46,24 +41,14 @@
       <div class="filters__section">
         <div class="filters__title">SA Filters</div>
         <div class="field-group">
-          <label class="check">
-            <input type="checkbox" id="sa1" />
-            <span>SA1 (Perception)</span>
-          </label>
-          <label class="check">
-            <input type="checkbox" id="sa2" />
-            <span>SA2 (Comprehension)</span>
-          </label>
-          <label class="check">
-            <input type="checkbox" id="sa3" />
-            <span>SA3 (Projection)</span>
-          </label>
+          <label class="check"><input type="checkbox" id="sa1" /><span>SA1 (Perception)</span></label>
+          <label class="check"><input type="checkbox" id="sa2" /><span>SA2 (Comprehension)</span></label>
+          <label class="check"><input type="checkbox" id="sa3" /><span>SA3 (Projection)</span></label>
         </div>
       </div>
 
       <div class="filters__section">
         <div class="filters__title">Training Included</div>
-        <label class="sr-only" for="training">Training</label>
         <select id="training">
           <option value="all">All</option>
           <option value="yes">Y</option>
@@ -73,7 +58,6 @@
 
       <div class="filters__section">
         <div class="filters__title">Model-Based Support</div>
-        <label class="sr-only" for="modelBased">Model-based</label>
         <select id="modelBased">
           <option value="all">All</option>
           <option value="None">None</option>
@@ -85,9 +69,7 @@
       <div class="filters__section">
         <div class="filters__title">Scenario / Domain</div>
         <div class="hint">Select one or more scenarios.</div>
-        <div id="scenarioList" class="scenario-list">
-          <!-- injected -->
-        </div>
+        <div id="scenarioList" class="scenario-list"></div>
       </div>
 
       <div class="filters__section filters__section--footer">
@@ -102,8 +84,10 @@
 
       <div class="status-row">
         <div id="status" class="status">Loading…</div>
+        <div class="scroll-hint">Desktop: scroll table →</div>
       </div>
 
+      <!-- DESKTOP TABLE -->
       <div class="table-wrap">
         <table class="table" id="papersTable">
           <thead>
@@ -126,15 +110,18 @@
               <th>Relevance to My PhD</th>
             </tr>
           </thead>
-          <tbody id="tbody">
-            <!-- injected -->
-          </tbody>
+          <tbody id="tbody"></tbody>
         </table>
+      </div>
+
+      <!-- MOBILE CARDS -->
+      <div class="cards-wrap">
+        <div id="cards" class="cards"></div>
       </div>
 
       <footer class="footer">
         <div class="footer__note">
-          Tip: Use a local server (e.g., VS Code Live Server) to load <code>papers.json</code>.
+          Tip: Use a local server (VS Code Live Server) to load <code>papers.json</code>.
         </div>
       </footer>
     </section>
