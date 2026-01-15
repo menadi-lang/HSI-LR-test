@@ -13,7 +13,7 @@
       training: "all",     // all | yes | no
       modelBased: "all",   // all | None | Conceptual | Formal
       scenarios: new Set(),
-      sort: "year_desc"    // year_desc | year_asc | title_asc | title_desc
+      sort: "year_desc"
     }
   };
 
@@ -36,23 +36,7 @@
     filtersPanel: document.getElementById("filtersPanel")
   };
 
-  const COLS = [
-    { key: "paper", label: "Paper (Title — Author, Year)" },
-    { key: "scenario_domain", label: "Scenario / Domain" },
-    { key: "swarm_type", label: "Swarm Type" },
-    { key: "human_role", label: "Human Role" },
-    { key: "sa1_rating", label: "SA1" },
-    { key: "sa2_rating", label: "SA2" },
-    { key: "sa3_rating", label: "SA3" },
-    { key: "training_included", label: "Training" },
-    { key: "training_type", label: "Training Type" },
-    { key: "model_based_support", label: "Model-Based" },
-    { key: "interface_visualization", label: "Interface / Visualization" },
-    { key: "evaluation_metrics_raw", label: "Evaluation Metrics" },
-    { key: "key_contribution", label: "Key Contribution" },
-    { key: "main_limitation", label: "Main Limitation" },
-    { key: "relevance_to_phd", label: "Relevance to My PhD" }
-  ];
+  // ===== CSV loading + parsing (no libs) =====
 
   function normStr(s) { return String(s ?? "").trim(); }
 
@@ -62,6 +46,167 @@
       "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;"
     }[m]));
   }
+
+  // Robust-ish CSV parser with quotes + commas inside quotes
+  function parseCSV(text) {
+    const rows = [];
+    let row = [];
+    let cur = "";
+    let inQuotes = false;
+
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      const next = text[i + 1];
+
+      if (ch === '"' && inQuotes && next === '"') {
+        cur += '"';
+        i++;
+      } else if (ch === '"') {
+        inQuotes = !inQuotes;
+      } else if (ch === "," && !inQuotes) {
+        row.push(cur);
+        cur = "";
+      } else if ((ch === "\n" || ch === "\r") && !inQuotes) {
+        if (ch === "\r" && next === "\n") i++;
+        row.push(cur);
+        rows.push(row);
+        row = [];
+        cur = "";
+      } else {
+        cur += ch;
+      }
+    }
+    // last cell
+    if (cur.length > 0 || row.length > 0) {
+      row.push(cur);
+      rows.push(row);
+    }
+    // remove empty trailing lines
+    return rows.filter(r => r.some(c => normStr(c).length));
+  }
+
+  function valueFromRow(rowObj, keyCandidates) {
+    for (const k of keyCandidates) {
+      if (k in rowObj) return rowObj[k];
+    }
+    return "";
+  }
+
+  function saBoolFromRating(r) {
+    // treat Y and P as "addressed" for filtering (same as your UI badges)
+    const v = normStr(r).toUpperCase();
+    return v === "Y" || v === "P";
+  }
+
+  function trainingBoolFromYN(v) {
+    const s = normStr(v).toUpperCase();
+    if (s === "Y" || s === "YES" || s === "TRUE") return true;
+    if (s === "N" || s === "NO" || s === "FALSE") return false;
+    return null;
+  }
+
+  function parseYearFromPaper(paperCell, yearCell) {
+    const y = parseInt(normStr(yearCell), 10);
+    if (!Number.isNaN(y)) return y;
+    const m = normStr(paperCell).match(/\b(19|20)\d{2}\b/);
+    return m ? parseInt(m[0], 10) : null;
+  }
+
+  function normalizeModelBased(v) {
+    const s = normStr(v);
+    if (!s) return "—";
+    const t = s.toLowerCase();
+    if (t.includes("formal")) return "Formal";
+    if (t.includes("concept")) return "Conceptual";
+    if (t.includes("none") || t === "—" || t.includes("no")) return "None";
+    // keep as-is if already correct
+    if (s === "None" || s === "Conceptual" || s === "Formal") return s;
+    return s;
+  }
+
+  function metricsArrayFromCell(cell) {
+    const s = normStr(cell);
+    if (!s || s === "—") return [];
+    // split common separators safely
+    return s.split(/;|,|\||·|•/g).map(x => normStr(x)).filter(Boolean);
+  }
+
+  // Map Notion CSV headers -> locked schema keys.
+  // This supports common variants so you don't need to rename columns.
+  function rowFromNotion(rowObj) {
+    const paper = valueFromRow(rowObj, [
+      "Paper (Title — Author, Year)",
+      "Paper (Author, Year)",
+      "Paper",
+      "Title",
+      "Paper Title — Author, Year",
+      "Name"
+    ]);
+
+    const scenario = valueFromRow(rowObj, ["Scenario / Domain", "Scenario", "Domain"]);
+    const swarmType = valueFromRow(rowObj, ["Swarm Type"]);
+    const humanRole = valueFromRow(rowObj, ["Human Role"]);
+
+    const sa1 = valueFromRow(rowObj, ["SA1 (Perception)", "SA1"]);
+    const sa2 = valueFromRow(rowObj, ["SA2 (Comprehension)", "SA2"]);
+    const sa3 = valueFromRow(rowObj, ["SA3 (Projection)", "SA3"]);
+
+    const trainingInc = valueFromRow(rowObj, ["Training Included (Y/N)", "Training Included", "Training"]);
+    const trainingType = valueFromRow(rowObj, ["Training Type"]);
+    const modelBased = valueFromRow(rowObj, ["Model-Based Support (None / Conceptual / Formal)", "Model-Based Support", "Model-Based"]);
+
+    const iface = valueFromRow(rowObj, ["Interface / Visualization", "Interface"]);
+    const evalRaw = valueFromRow(rowObj, ["Evaluation Metrics", "Evaluation"]);
+    const contrib = valueFromRow(rowObj, ["Key Contribution"]);
+    const lim = valueFromRow(rowObj, ["Main Limitation"]);
+    const rel = valueFromRow(rowObj, ["Relevance to My PhD", "Relevance"]);
+
+    // best-effort title/authors split for search/sort
+    const titleGuess = normStr(paper).split("—")[0].trim();
+    const authorsYear = normStr(paper).split("—")[1]?.trim() || "";
+    const yearGuess = parseYearFromPaper(paper, rowObj["Year"] || rowObj["year"] || "");
+    const authorsGuess = authorsYear.replace(/\b(19|20)\d{2}\b/g, "").replace(/^[, ]+|[, ]+$/g, "");
+
+    return {
+      paper: normStr(paper) || "—",
+      title: titleGuess || "—",
+      authors: authorsGuess || "—",
+      year: yearGuess,
+
+      scenario_domain: normStr(scenario) || "—",
+      swarm_type: normStr(swarmType) || "—",
+      human_role: normStr(humanRole) || "—",
+
+      sa1_rating: normStr(sa1) || "—",
+      sa2_rating: normStr(sa2) || "—",
+      sa3_rating: normStr(sa3) || "—",
+
+      sa1: saBoolFromRating(sa1),
+      sa2: saBoolFromRating(sa2),
+      sa3: saBoolFromRating(sa3),
+
+      training_included: trainingBoolFromYN(trainingInc),
+      training_type: normStr(trainingType) || "—",
+
+      model_based_support: normalizeModelBased(modelBased),
+
+      interface_visualization: normStr(iface) || "—",
+      evaluation_metrics_raw: normStr(evalRaw) || "—",
+      evaluation_metrics: metricsArrayFromCell(evalRaw),
+
+      key_contribution: normStr(contrib) || "—",
+      main_limitation: normStr(lim) || "—",
+      relevance_to_phd: normStr(rel) || "—"
+    };
+  }
+
+  function deriveScenarios(papers) {
+    const set = new Set();
+    papers.forEach(p => set.add(normStr(p.scenario_domain) || "—"));
+    return [...set].sort((a, b) => a.localeCompare(b));
+  }
+
+  // ===== UI rendering (same behavior as before) =====
 
   function paperId(p) {
     const base = normStr(p.paper) || `${normStr(p.title)}-${normStr(p.authors)}-${p.year}`;
@@ -76,7 +221,7 @@
   }
 
   function badgeHtml(rating) {
-    const v = normStr(rating);
+    const v = normStr(rating).toUpperCase();
     const cls =
       v === "Y" ? "badge badge--y" :
       v === "P" ? "badge badge--p" :
@@ -119,10 +264,12 @@
   function sortPapers(arr) {
     const s = STATE.filters.sort;
     const copy = arr.slice();
+
     if (s === "year_asc") copy.sort((a, b) => (a.year ?? 0) - (b.year ?? 0));
     else if (s === "year_desc") copy.sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
     else if (s === "title_asc") copy.sort((a, b) => normStr(a.title).localeCompare(normStr(b.title)));
     else if (s === "title_desc") copy.sort((a, b) => normStr(b.title).localeCompare(normStr(a.title)));
+
     return copy;
   }
 
@@ -476,12 +623,6 @@
     URL.revokeObjectURL(url);
   }
 
-  function deriveScenarios(papers) {
-    const set = new Set();
-    papers.forEach(p => set.add(normStr(p.scenario_domain) || "—"));
-    return [...set].sort((a, b) => a.localeCompare(b));
-  }
-
   function bindControls() {
     els.q.addEventListener("input", () => { STATE.filters.q = els.q.value; renderAll(); });
     els.sa1.addEventListener("change", () => { STATE.filters.sa1 = els.sa1.checked; renderAll(); });
@@ -518,57 +659,42 @@
     bindControls();
 
     try {
-      const res = await fetch("papers.json", { cache: "no-store" });
-      if (!res.ok) throw new Error(`Failed to load papers.json (${res.status})`);
-      const data = await res.json();
+      // ✅ Change here: load CSV exported from Notion
+      const res = await fetch("papers.csv", { cache: "no-store" });
+      if (!res.ok) throw new Error(`Failed to load papers.csv (${res.status})`);
+      const text = await res.text();
 
-      STATE.all = data.map((p) => ({
-        ...p,
-        paper: normStr(p.paper),
-        title: normStr(p.title),
-        authors: normStr(p.authors),
-        year: p.year ?? null,
-        scenario_domain: normStr(p.scenario_domain),
-        swarm_type: normStr(p.swarm_type),
-        human_role: normStr(p.human_role),
-        sa1: p.sa1 === true,
-        sa2: p.sa2 === true,
-        sa3: p.sa3 === true,
-        sa1_rating: normStr(p.sa1_rating),
-        sa2_rating: normStr(p.sa2_rating),
-        sa3_rating: normStr(p.sa3_rating),
-        training_included: p.training_included === true ? true : (p.training_included === false ? false : null),
-        training_type: normStr(p.training_type),
-        model_based_support: normStr(p.model_based_support),
-        interface_visualization: normStr(p.interface_visualization),
-        evaluation_metrics_raw: normStr(p.evaluation_metrics_raw),
-        evaluation_metrics: Array.isArray(p.evaluation_metrics) ? p.evaluation_metrics : [],
-        key_contribution: normStr(p.key_contribution),
-        main_limitation: normStr(p.main_limitation),
-        relevance_to_phd: normStr(p.relevance_to_phd)
-      }));
+      const rows = parseCSV(text);
+      const headers = rows[0].map(h => normStr(h));
+      const dataRows = rows.slice(1);
+
+      const objects = dataRows.map(r => {
+        const obj = {};
+        headers.forEach((h, i) => { obj[h] = r[i] ?? ""; });
+        return obj;
+      });
+
+      STATE.all = objects.map(rowFromNotion);
 
       STATE.scenarios = deriveScenarios(STATE.all);
       buildScenarioList();
       renderAll();
     } catch (err) {
       console.error(err);
-      els.status.textContent = "Error loading papers.json. Use a local server.";
+      els.status.textContent = "Error loading papers.csv. Use a local server.";
       els.tbody.innerHTML = `
         <tr>
           <td colspan="16" style="padding:14px;">
             <div style="color:#ffb4c0;">
-              Failed to load <code>papers.json</code>.
-              Run with a local server (VS Code Live Server) or GitHub Pages.
+              Failed to load <code>papers.csv</code>.
+              Put it in the same folder and run with Live Server / GitHub Pages.
             </div>
           </td>
         </tr>
       `;
-      els.cards.innerHTML = `
-        <div style="color:#ffb4c0;padding:14px;">
-          Failed to load <code>papers.json</code>.
-        </div>
-      `;
+      if (els.cards) {
+        els.cards.innerHTML = `<div style="color:#ffb4c0;padding:14px;">Failed to load <code>papers.csv</code>.</div>`;
+      }
     }
   }
 
