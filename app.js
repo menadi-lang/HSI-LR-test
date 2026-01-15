@@ -134,14 +134,15 @@
   // Map Notion CSV headers -> locked schema keys.
   // This supports common variants so you don't need to rename columns.
   function rowFromNotion(rowObj) {
-    const paper = valueFromRow(rowObj, [
-      "Paper (Title — Author, Year)",
-      "Paper (Author, Year)",
-      "Paper",
-      "Title",
-      "Paper Title — Author, Year",
-      "Name"
-    ]);
+   const paper = valueFromRow(rowObj, [
+  "Paper (Title — Author, Year)",
+  "Paper (Author, Year)",
+  "Paper (Author, Year) ",   // (just in case Notion adds trailing space)
+  "Paper",
+  "Title",
+  "Paper Title — Author, Year",
+  "Name"
+]);
 
     const scenario = valueFromRow(rowObj, ["Scenario / Domain", "Scenario", "Domain"]);
     const swarmType = valueFromRow(rowObj, ["Swarm Type"]);
@@ -700,3 +701,4 @@
 
   load();
 })();
+
