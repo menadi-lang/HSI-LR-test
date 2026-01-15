@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>HSI Literature Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__inner">
+      <div class="brand">
+        <div class="brand__title">HSI Literature Dashboard</div>
+        <div class="brand__subtitle">Master comparative table (offline static)</div>
+      </div>
+
+      <div class="topbar__actions">
+        <div class="search">
+          <label class="sr-only" for="q">Search</label>
+          <input id="q" type="search" placeholder="Search title, author, scenario, keywords…" autocomplete="off" />
+        </div>
+
+        <div class="controls">
+          <label class="sr-only" for="sort">Sort</label>
+          <select id="sort">
+            <option value="year_desc">Year (new → old)</option>
+            <option value="year_asc">Year (old → new)</option>
+            <option value="title_asc">Title (A → Z)</option>
+            <option value="title_desc">Title (Z → A)</option>
+          </select>
+
+          <button id="exportCsv" class="btn btn--primary" type="button">
+            Export CSV
+          </button>
+
+          <button id="toggleFilters" class="btn btn--ghost" type="button">
+            Filters
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside id="filtersPanel" class="filters">
+      <div class="filters__section">
+        <div class="filters__title">SA Filters</div>
+        <div class="field-group">
+          <label class="check">
+            <input type="checkbox" id="sa1" />
+            <span>SA1 (Perception)</span>
+          </label>
+          <label class="check">
+            <input type="checkbox" id="sa2" />
+            <span>SA2 (Comprehension)</span>
+          </label>
+          <label class="check">
+            <input type="checkbox" id="sa3" />
+            <span>SA3 (Projection)</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="filters__section">
+        <div class="filters__title">Training Included</div>
+        <label class="sr-only" for="training">Training</label>
+        <select id="training">
+          <option value="all">All</option>
+          <option value="yes">Y</option>
+          <option value="no">N</option>
+        </select>
+      </div>
+
+      <div class="filters__section">
+        <div class="filters__title">Model-Based Support</div>
+        <label class="sr-only" for="modelBased">Model-based</label>
+        <select id="modelBased">
+          <option value="all">All</option>
+          <option value="None">None</option>
+          <option value="Conceptual">Conceptual</option>
+          <option value="Formal">Formal</option>
+        </select>
+      </div>
+
+      <div class="filters__section">
+        <div class="filters__title">Scenario / Domain</div>
+        <div class="hint">Select one or more scenarios.</div>
+        <div id="scenarioList" class="scenario-list">
+          <!-- injected -->
+        </div>
+      </div>
+
+      <div class="filters__section filters__section--footer">
+        <button id="clearAll" class="btn btn--danger" type="button">Clear all</button>
+      </div>
+    </aside>
+
+    <section class="content">
+      <div class="chips-row">
+        <div id="chips" class="chips"></div>
+      </div>
+
+      <div class="status-row">
+        <div id="status" class="status">Loading…</div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table" id="papersTable">
+          <thead>
+            <tr>
+              <th class="col-expand"></th>
+              <th>Paper (Title — Author, Year)</th>
+              <th>Scenario / Domain</th>
+              <th>Swarm Type</th>
+              <th>Human Role</th>
+              <th>SA1</th>
+              <th>SA2</th>
+              <th>SA3</th>
+              <th>Training</th>
+              <th>Training Type</th>
+              <th>Model-Based</th>
+              <th>Interface / Visualization</th>
+              <th>Evaluation Metrics</th>
+              <th>Key Contribution</th>
+              <th>Main Limitation</th>
+              <th>Relevance to My PhD</th>
+            </tr>
+          </thead>
+          <tbody id="tbody">
+            <!-- injected -->
+          </tbody>
+        </table>
+      </div>
+
+      <footer class="footer">
+        <div class="footer__note">
+          Tip: Use a local server (e.g., VS Code Live Server) to load <code>papers.json</code>.
+        </div>
+      </footer>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
