@@ -12,7 +12,7 @@
       sa3: false,
       training: "all",     // all | yes | no
       modelBased: "all",   // all | None | Conceptual | Formal
-      scenarios: new Set(), // selected scenario_domain values
+      scenarios: new Set(),
       sort: "year_desc"    // year_desc | year_asc | title_asc | title_desc
     }
   };
@@ -28,6 +28,7 @@
     chips: document.getElementById("chips"),
     status: document.getElementById("status"),
     tbody: document.getElementById("tbody"),
+    cards: document.getElementById("cards"),
     sort: document.getElementById("sort"),
     exportCsv: document.getElementById("exportCsv"),
     clearAll: document.getElementById("clearAll"),
@@ -35,7 +36,6 @@
     filtersPanel: document.getElementById("filtersPanel")
   };
 
-  // Locked schema columns
   const COLS = [
     { key: "paper", label: "Paper (Title — Author, Year)" },
     { key: "scenario_domain", label: "Scenario / Domain" },
@@ -54,17 +54,28 @@
     { key: "relevance_to_phd", label: "Relevance to My PhD" }
   ];
 
-  function normStr(s) {
-    return String(s ?? "").trim();
+  function normStr(s) { return String(s ?? "").trim(); }
+
+  function escapeHtml(str) {
+    const s = String(str ?? "");
+    return s.replace(/[&<>"']/g, (m) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;"
+    }[m]));
   }
 
   function paperId(p) {
-    // stable id for expanded state
     const base = normStr(p.paper) || `${normStr(p.title)}-${normStr(p.authors)}-${p.year}`;
     return base.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
   }
 
-  function toBadge(rating) {
+  function trainingYN(v) { return v === true ? "Y" : v === false ? "N" : "—"; }
+
+  function safeCell(v) {
+    const s = normStr(v);
+    return s.length ? escapeHtml(s) : "—";
+  }
+
+  function badgeHtml(rating) {
     const v = normStr(rating);
     const cls =
       v === "Y" ? "badge badge--y" :
@@ -72,25 +83,6 @@
       v === "N" ? "badge badge--n" :
       "badge badge--dash";
     return `<span class="${cls}">${v || "—"}</span>`;
-  }
-
-  function trainingYN(v) {
-    return v === true ? "Y" : v === false ? "N" : "—";
-  }
-
-  function safeCell(v) {
-    const s = normStr(v);
-    return s.length ? escapeHtml(s) : "—";
-  }
-
-  function escapeHtml(str) {
-    return str.replace(/[&<>"']/g, (m) => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      "\"": "&quot;",
-      "'": "&#39;"
-    }[m]));
   }
 
   function buildScenarioList() {
@@ -124,43 +116,38 @@
     els.scenarioList.appendChild(frag);
   }
 
+  function sortPapers(arr) {
+    const s = STATE.filters.sort;
+    const copy = arr.slice();
+    if (s === "year_asc") copy.sort((a, b) => (a.year ?? 0) - (b.year ?? 0));
+    else if (s === "year_desc") copy.sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
+    else if (s === "title_asc") copy.sort((a, b) => normStr(a.title).localeCompare(normStr(b.title)));
+    else if (s === "title_desc") copy.sort((a, b) => normStr(b.title).localeCompare(normStr(a.title)));
+    return copy;
+  }
+
   function applyFilters() {
     const { q, sa1, sa2, sa3, training, modelBased, scenarios } = STATE.filters;
     const query = q.trim().toLowerCase();
 
     const out = STATE.all.filter((p) => {
-      // SA filters: AND across selected
       if (sa1 && p.sa1 !== true) return false;
       if (sa2 && p.sa2 !== true) return false;
       if (sa3 && p.sa3 !== true) return false;
 
-      // Training filter
       if (training === "yes" && p.training_included !== true) return false;
       if (training === "no" && p.training_included !== false) return false;
 
-      // Model-based filter
       if (modelBased !== "all" && normStr(p.model_based_support) !== modelBased) return false;
 
-      // Scenario filter: OR across selected
       if (scenarios.size > 0 && !scenarios.has(normStr(p.scenario_domain))) return false;
 
-      // Search
       if (query.length > 0) {
         const hay = [
-          p.paper,
-          p.title,
-          p.authors,
-          p.scenario_domain,
-          p.swarm_type,
-          p.human_role,
-          p.training_type,
-          p.model_based_support,
-          p.interface_visualization,
-          p.evaluation_metrics_raw,
+          p.paper, p.title, p.authors, p.scenario_domain, p.swarm_type, p.human_role,
+          p.training_type, p.model_based_support, p.interface_visualization, p.evaluation_metrics_raw,
           (p.evaluation_metrics || []).join(" "),
-          p.key_contribution,
-          p.main_limitation,
-          p.relevance_to_phd
+          p.key_contribution, p.main_limitation, p.relevance_to_phd
         ].map(normStr).join(" ").toLowerCase();
 
         if (!hay.includes(query)) return false;
@@ -172,19 +159,12 @@
     STATE.filtered = sortPapers(out);
   }
 
-  function sortPapers(arr) {
-    const s = STATE.filters.sort;
-    const copy = arr.slice();
-    if (s === "year_asc") copy.sort((a, b) => (a.year ?? 0) - (b.year ?? 0));
-    else if (s === "year_desc") copy.sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
-    else if (s === "title_asc") copy.sort((a, b) => normStr(a.title).localeCompare(normStr(b.title)));
-    else if (s === "title_desc") copy.sort((a, b) => normStr(b.title).localeCompare(normStr(a.title)));
-    return copy;
+  function renderStatus() {
+    els.status.textContent = `${STATE.filtered.length} / ${STATE.all.length} papers shown`;
   }
 
   function renderChips() {
     const chips = [];
-
     const { q, sa1, sa2, sa3, training, modelBased, scenarios } = STATE.filters;
 
     if (q.trim()) chips.push({ type: "q", label: "Search", value: q.trim() });
@@ -193,14 +173,9 @@
     if (sa3) chips.push({ type: "sa3", label: "SA", value: "SA3" });
     if (training !== "all") chips.push({ type: "training", label: "Training", value: training.toUpperCase() });
     if (modelBased !== "all") chips.push({ type: "modelBased", label: "Model", value: modelBased });
-    if (scenarios.size > 0) {
-      [...scenarios].forEach((sc) => chips.push({ type: "scenario", label: "Scenario", value: sc }));
-    }
+    if (scenarios.size > 0) [...scenarios].forEach(sc => chips.push({ type: "scenario", label: "Scenario", value: sc }));
 
-    if (chips.length === 0) {
-      els.chips.innerHTML = "";
-      return;
-    }
+    if (chips.length === 0) { els.chips.innerHTML = ""; return; }
 
     els.chips.innerHTML = chips.map((c, i) => {
       const key = `${c.type}:${c.value}:${i}`;
@@ -213,14 +188,13 @@
       `;
     }).join("");
 
-    // bind chip removals
     [...els.chips.querySelectorAll(".chip")].forEach((node) => {
       const key = node.getAttribute("data-chip") || "";
       const btn = node.querySelector(".chip__x");
       btn.addEventListener("click", () => {
         const parts = key.split(":");
         const type = parts[0];
-        const value = parts.slice(1, -1).join(":"); // safe-ish
+        const value = parts.slice(1, -1).join(":");
         removeChip(type, value);
       });
     });
@@ -248,7 +222,6 @@
     els.modelBased.value = STATE.filters.modelBased;
     els.sort.value = STATE.filters.sort;
 
-    // scenario checkboxes
     STATE.scenarios.forEach((sc) => {
       const id = `sc_${paperId({ paper: sc })}`;
       const cb = document.getElementById(id);
@@ -256,57 +229,34 @@
     });
   }
 
-  function renderStatus() {
-    const total = STATE.all.length;
-    const shown = STATE.filtered.length;
-    els.status.textContent = `${shown} / ${total} papers shown`;
-  }
-
   function renderTable() {
     const rows = [];
+
     STATE.filtered.forEach((p) => {
       const id = paperId(p);
       const open = STATE.expanded.has(id);
       const expSymbol = open ? "−" : "+";
-
-      const cells = {
-        paper: safeCell(p.paper),
-        scenario_domain: safeCell(p.scenario_domain),
-        swarm_type: safeCell(p.swarm_type),
-        human_role: safeCell(p.human_role),
-        sa1_rating: toBadge(p.sa1_rating),
-        sa2_rating: toBadge(p.sa2_rating),
-        sa3_rating: toBadge(p.sa3_rating),
-        training_included: toBadge(trainingYN(p.training_included)),
-        training_type: safeCell(p.training_type),
-        model_based_support: safeCell(p.model_based_support),
-        interface_visualization: safeCell(p.interface_visualization),
-        evaluation_metrics_raw: safeCell(p.evaluation_metrics_raw),
-        key_contribution: safeCell(p.key_contribution),
-        main_limitation: safeCell(p.main_limitation),
-        relevance_to_phd: safeCell(p.relevance_to_phd)
-      };
 
       rows.push(`
         <tr data-id="${escapeHtml(id)}">
           <td class="col-expand">
             <button class="expander" type="button" aria-label="Toggle details">${expSymbol}</button>
           </td>
-          <td>${cells.paper}</td>
-          <td>${cells.scenario_domain}</td>
-          <td>${cells.swarm_type}</td>
-          <td>${cells.human_role}</td>
-          <td>${cells.sa1_rating}</td>
-          <td>${cells.sa2_rating}</td>
-          <td>${cells.sa3_rating}</td>
-          <td>${cells.training_included}</td>
-          <td>${cells.training_type}</td>
-          <td>${cells.model_based_support}</td>
-          <td>${cells.interface_visualization}</td>
-          <td>${cells.evaluation_metrics_raw}</td>
-          <td>${cells.key_contribution}</td>
-          <td>${cells.main_limitation}</td>
-          <td>${cells.relevance_to_phd}</td>
+          <td>${safeCell(p.paper)}</td>
+          <td>${safeCell(p.scenario_domain)}</td>
+          <td>${safeCell(p.swarm_type)}</td>
+          <td>${safeCell(p.human_role)}</td>
+          <td>${badgeHtml(p.sa1_rating)}</td>
+          <td>${badgeHtml(p.sa2_rating)}</td>
+          <td>${badgeHtml(p.sa3_rating)}</td>
+          <td>${badgeHtml(trainingYN(p.training_included))}</td>
+          <td>${safeCell(p.training_type)}</td>
+          <td>${safeCell(p.model_based_support)}</td>
+          <td>${safeCell(p.interface_visualization)}</td>
+          <td>${safeCell(p.evaluation_metrics_raw)}</td>
+          <td>${safeCell(p.key_contribution)}</td>
+          <td>${safeCell(p.main_limitation)}</td>
+          <td>${safeCell(p.relevance_to_phd)}</td>
         </tr>
       `);
 
@@ -346,7 +296,6 @@
 
     els.tbody.innerHTML = rows.join("");
 
-    // bind expanders
     [...els.tbody.querySelectorAll("tr[data-id] .expander")].forEach((btn) => {
       const tr = btn.closest("tr[data-id]");
       const id = tr.getAttribute("data-id");
@@ -358,19 +307,117 @@
     });
   }
 
-  function renderAll(scrollTop = true) {
-    const prevScroll = els.tbody.closest(".table-wrap")?.scrollTop ?? 0;
+  function renderCards() {
+    const cards = [];
+
+    STATE.filtered.forEach((p) => {
+      const id = paperId(p);
+      const open = STATE.expanded.has(id);
+      const sym = open ? "−" : "+";
+
+      const metrics = Array.isArray(p.evaluation_metrics) ? p.evaluation_metrics : [];
+      const metricsPills = metrics.length
+        ? metrics.map(m => `<span class="pill">${escapeHtml(String(m))}</span>`).join("")
+        : `<span class="pill">—</span>`;
+
+      cards.push(`
+        <article class="paper-card ${open ? "is-open" : ""}" data-card="${escapeHtml(id)}">
+          <div class="paper-card__top">
+            <div>
+              <div class="paper-card__title">${safeCell(p.paper)}</div>
+              <div class="paper-card__sub">${safeCell(p.scenario_domain)}</div>
+            </div>
+            <button class="paper-card__btn" type="button" aria-label="Toggle details">${sym}</button>
+          </div>
+
+          <div class="paper-card__grid">
+            <div class="kv">
+              <div class="kv__k">Swarm Type</div>
+              <div class="kv__v">${safeCell(p.swarm_type)}</div>
+            </div>
+            <div class="kv">
+              <div class="kv__k">Human Role</div>
+              <div class="kv__v">${safeCell(p.human_role)}</div>
+            </div>
+
+            <div class="kv">
+              <div class="kv__k">SA</div>
+              <div class="kv__badges">
+                ${badgeHtml(p.sa1_rating)}
+                ${badgeHtml(p.sa2_rating)}
+                ${badgeHtml(p.sa3_rating)}
+              </div>
+            </div>
+
+            <div class="kv">
+              <div class="kv__k">Training / Model</div>
+              <div class="kv__v">
+                Training: ${escapeHtml(trainingYN(p.training_included))}<br/>
+                Model: ${safeCell(p.model_based_support)}
+              </div>
+            </div>
+
+            <div class="kv">
+              <div class="kv__k">Training Type</div>
+              <div class="kv__v">${safeCell(p.training_type)}</div>
+            </div>
+
+            <div class="kv">
+              <div class="kv__k">Evaluation</div>
+              <div class="kv__v">${safeCell(p.evaluation_metrics_raw)}</div>
+            </div>
+          </div>
+
+          <div class="paper-card__details">
+            <div class="detail-card__box">
+              <h4>Key contribution</h4>
+              <p>${safeCell(p.key_contribution)}</p>
+            </div>
+            <div class="detail-card__box">
+              <h4>Main limitation</h4>
+              <p>${safeCell(p.main_limitation)}</p>
+            </div>
+            <div class="detail-card__box">
+              <h4>Interface / visualization</h4>
+              <p>${safeCell(p.interface_visualization)}</p>
+            </div>
+            <div class="detail-card__box">
+              <h4>Evaluation metrics (array)</h4>
+              <div class="detail-card__metrics">${metricsPills}</div>
+            </div>
+            <div class="detail-card__box">
+              <h4>Relevance to my PhD</h4>
+              <p>${safeCell(p.relevance_to_phd)}</p>
+            </div>
+          </div>
+        </article>
+      `);
+    });
+
+    els.cards.innerHTML = cards.join("");
+
+    [...els.cards.querySelectorAll(".paper-card__btn")].forEach((btn) => {
+      const card = btn.closest(".paper-card");
+      const id = card.getAttribute("data-card");
+      btn.addEventListener("click", () => {
+        if (STATE.expanded.has(id)) STATE.expanded.delete(id);
+        else STATE.expanded.add(id);
+        renderAll(false);
+      });
+    });
+  }
+
+  function renderAll(keepScroll = true) {
+    const wrap = document.querySelector(".table-wrap");
+    const prev = wrap ? wrap.scrollLeft : 0;
 
     applyFilters();
     renderChips();
     renderStatus();
     renderTable();
+    renderCards();
 
-    // keep horizontal scroll position if desired
-    if (scrollTop === false) {
-      const wrap = els.tbody.closest(".table-wrap");
-      if (wrap) wrap.scrollTop = prevScroll;
-    }
+    if (keepScroll && wrap) wrap.scrollLeft = prev;
   }
 
   function clearAllFilters() {
@@ -415,7 +462,6 @@
       row.push(normStr(p.key_contribution));
       row.push(normStr(p.main_limitation));
       row.push(normStr(p.relevance_to_phd));
-
       lines.push(row.map(csvEscape).join(","));
     });
 
@@ -437,53 +483,26 @@
   }
 
   function bindControls() {
-    els.q.addEventListener("input", () => {
-      STATE.filters.q = els.q.value;
-      renderAll();
-    });
+    els.q.addEventListener("input", () => { STATE.filters.q = els.q.value; renderAll(); });
+    els.sa1.addEventListener("change", () => { STATE.filters.sa1 = els.sa1.checked; renderAll(); });
+    els.sa2.addEventListener("change", () => { STATE.filters.sa2 = els.sa2.checked; renderAll(); });
+    els.sa3.addEventListener("change", () => { STATE.filters.sa3 = els.sa3.checked; renderAll(); });
 
-    els.sa1.addEventListener("change", () => {
-      STATE.filters.sa1 = els.sa1.checked;
-      renderAll();
-    });
-    els.sa2.addEventListener("change", () => {
-      STATE.filters.sa2 = els.sa2.checked;
-      renderAll();
-    });
-    els.sa3.addEventListener("change", () => {
-      STATE.filters.sa3 = els.sa3.checked;
-      renderAll();
-    });
-
-    els.training.addEventListener("change", () => {
-      STATE.filters.training = els.training.value;
-      renderAll();
-    });
-
-    els.modelBased.addEventListener("change", () => {
-      STATE.filters.modelBased = els.modelBased.value;
-      renderAll();
-    });
-
-    els.sort.addEventListener("change", () => {
-      STATE.filters.sort = els.sort.value;
-      renderAll();
-    });
+    els.training.addEventListener("change", () => { STATE.filters.training = els.training.value; renderAll(); });
+    els.modelBased.addEventListener("change", () => { STATE.filters.modelBased = els.modelBased.value; renderAll(); });
+    els.sort.addEventListener("change", () => { STATE.filters.sort = els.sort.value; renderAll(); });
 
     els.exportCsv.addEventListener("click", exportFilteredToCsv);
-
     els.clearAll.addEventListener("click", clearAllFilters);
 
     els.toggleFilters.addEventListener("click", () => {
       els.filtersPanel.classList.toggle("is-open");
     });
 
-    // close filters on backdrop tap (mobile)
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") els.filtersPanel.classList.remove("is-open");
     });
 
-    // close filters when clicking outside (mobile)
     document.addEventListener("click", (e) => {
       const isMobile = window.matchMedia("(max-width: 980px)").matches;
       if (!isMobile) return;
@@ -503,7 +522,6 @@
       if (!res.ok) throw new Error(`Failed to load papers.json (${res.status})`);
       const data = await res.json();
 
-      // Minimal normalization (no reinterpretation)
       STATE.all = data.map((p) => ({
         ...p,
         paper: normStr(p.paper),
@@ -532,7 +550,6 @@
 
       STATE.scenarios = deriveScenarios(STATE.all);
       buildScenarioList();
-      syncControlsFromState();
       renderAll();
     } catch (err) {
       console.error(err);
@@ -546,6 +563,11 @@
             </div>
           </td>
         </tr>
+      `;
+      els.cards.innerHTML = `
+        <div style="color:#ffb4c0;padding:14px;">
+          Failed to load <code>papers.json</code>.
+        </div>
       `;
     }
   }
