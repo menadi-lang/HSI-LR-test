@@ -7,8 +7,6 @@
   --line:#233246;
   --accent:#4ea1ff;
   --danger:#ff4e6a;
-  --good:#39d98a;
-  --warn:#ffd166;
   --shadow: 0 10px 30px rgba(0,0,0,.35);
   --radius: 14px;
   --radius-sm: 10px;
@@ -204,13 +202,9 @@ select{
 
 .content{
   min-width:0;
-  considered:unset;
 }
 
-.chips-row{
-  margin-bottom: 10px;
-}
-
+.chips-row{ margin-bottom: 10px; }
 .chips{
   display:flex;
   flex-wrap:wrap;
@@ -247,36 +241,27 @@ select{
   gap:10px;
   margin-bottom: 10px;
 }
-.status{
-  color: var(--muted);
-  font-size: 13px;
-}
+.status{ color: var(--muted); font-size: 13px; }
+.scroll-hint{ color: rgba(159,176,195,.75); font-size: 12px; }
 
+/* TABLE (Desktop/Tablet) */
 .table-wrap{
   border-radius: var(--radius);
   border: 1px solid rgba(35,50,70,.8);
   background: rgba(15,22,32,.82);
   box-shadow: var(--shadow);
 
-  /* FIX: allow full horizontal table access */
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-gutter: stable both-edges;
 }
 
-
 .table{
   width:100%;
   border-collapse:collapse;
-  min-width: 1600px; /* was 1100px */
+  min-width: 2200px; /* ensures horizontal scroll */
 }
-
-
-
-
-
-
 
 .table thead th{
   position:sticky;
@@ -296,12 +281,9 @@ select{
   font-size: 13px;
   vertical-align: top;
 }
-.table tbody tr:hover td{
-  background: rgba(78,161,255,.06);
-}
-.col-expand{
-  width: 38px;
-}
+.table tbody tr:hover td{ background: rgba(78,161,255,.06); }
+
+.col-expand{ width: 38px; }
 .expander{
   width: 28px;
   height: 28px;
@@ -314,9 +296,7 @@ select{
   align-items:center;
   justify-content:center;
 }
-.expander:hover{
-  border-color: rgba(78,161,255,.7);
-}
+.expander:hover{ border-color: rgba(78,161,255,.7); }
 
 .badge{
   display:inline-flex;
@@ -378,21 +358,98 @@ select{
   color: var(--text);
 }
 
-.footer{
-  margin-top: 12px;
+/* MOBILE CARDS */
+.cards-wrap{ display:none; }
+.cards{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+.paper-card{
+  background: rgba(15,22,32,.82);
+  border: 1px solid rgba(35,50,70,.8);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow:hidden;
+}
+.paper-card__top{
+  padding: 12px 12px 10px;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+}
+.paper-card__title{
+  font-weight:700;
+  font-size: 14px;
+  line-height: 1.25;
+}
+.paper-card__sub{
+  margin-top: 6px;
   color: var(--muted);
   font-size: 12px;
 }
-.footer code{
-  font-family: var(--mono);
+.paper-card__btn{
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  border: 1px solid rgba(35,50,70,.85);
+  background: rgba(18,28,40,.85);
+  color: var(--text);
+  cursor:pointer;
+}
+.paper-card__grid{
+  padding: 0 12px 12px;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.kv{
+  background: rgba(18,28,40,.55);
+  border: 1px solid rgba(35,50,70,.55);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+}
+.kv__k{
+  color: var(--muted);
   font-size: 12px;
-  color: rgba(233,241,251,.9);
+  margin-bottom: 6px;
+}
+.kv__v{
+  font-size: 13px;
+  line-height: 1.3;
+}
+.kv__badges{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.paper-card__details{
+  border-top: 1px solid rgba(35,50,70,.6);
+  background: rgba(11,15,20,.55);
+  padding: 12px;
+  display:none;
+}
+.paper-card.is-open .paper-card__details{ display:block; }
+.paper-card__details .detail-card__box{
+  margin-bottom: 10px;
+  grid-column: auto;
+}
+.paper-card__details h4{
+  margin: 0 0 6px;
+  font-size: 12px;
+  color: var(--muted);
 }
 
+/* Footer */
+.footer{ margin-top: 12px; color: var(--muted); font-size: 12px; }
+.footer code{ font-family: var(--mono); font-size: 12px; color: rgba(233,241,251,.9); }
+
+/* Responsive behavior */
 @media (max-width: 980px){
-  .layout{
-    grid-template-columns: 1fr;
-  }
+  .layout{ grid-template-columns: 1fr; }
+
   .filters{
     position: fixed;
     left: 16px;
@@ -410,14 +467,11 @@ select{
     transform: translateY(0);
     pointer-events: auto;
   }
-  .table-wrap{
-    overflow:auto;
-  }
-  .detail-card{
-    grid-template-columns: 1fr;
-  }
-  .detail-card__box{
-    grid-column: span 12;
-  }
-}
 
+  .scroll-hint{ display:none; }
+
+  /* Mobile uses cards, hides table */
+  .table-wrap{ display:none; }
+  .cards-wrap{ display:block; }
+  .paper-card__grid{ grid-template-columns: 1fr; }
+}
