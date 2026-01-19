@@ -1,3 +1,4 @@
+/* app.js */
 /* eslint-disable no-console */
 (() => {
   const STATE = {
@@ -64,7 +65,7 @@
   }
 
   function paperId(p) {
-    const base = normStr(p.paper) || `${normStr(p.title)}-${normStr(p.authors)}-${p.year}`;
+    const base = normStr(p.id) || normStr(p.paper) || `${normStr(p.title)}-${normStr(p.authors)}-${p.year}`;
     return base.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
   }
 
@@ -147,7 +148,8 @@
           p.paper, p.title, p.authors, p.scenario_domain, p.swarm_type, p.human_role,
           p.training_type, p.model_based_support, p.interface_visualization, p.evaluation_metrics_raw,
           (p.evaluation_metrics || []).join(" "),
-          p.key_contribution, p.main_limitation, p.relevance_to_phd
+          p.key_contribution, p.main_limitation, p.relevance_to_phd,
+          p.resume, p.sa2_how
         ].map(normStr).join(" ").toLowerCase();
 
         if (!hay.includes(query)) return false;
@@ -266,10 +268,27 @@
           ? metrics.map(m => `<span class="pill">${escapeHtml(String(m))}</span>`).join("")
           : `<span class="pill">—</span>`;
 
+        const resumeBlock = normStr(p.resume)
+          ? `<p class="resume-text">${escapeHtml(p.resume)}</p>`
+          : `<p>—</p>`;
+
+        const sa2HowBlock = normStr(p.sa2_how)
+          ? `<p class="resume-text">${escapeHtml(p.sa2_how)}</p>`
+          : `<p>—</p>`;
+
         rows.push(`
           <tr class="details-row" data-details="${escapeHtml(id)}">
             <td colspan="16">
               <div class="detail-card">
+                <div class="detail-card__box">
+                  <h4>Résumé</h4>
+                  ${resumeBlock}
+                </div>
+                <div class="detail-card__box">
+                  <h4>SA2 — How?</h4>
+                  ${sa2HowBlock}
+                </div>
+
                 <div class="detail-card__box">
                   <h4>Key contribution</h4>
                   <p>${safeCell(p.key_contribution)}</p>
@@ -278,6 +297,7 @@
                   <h4>Main limitation</h4>
                   <p>${safeCell(p.main_limitation)}</p>
                 </div>
+
                 <div class="detail-card__box">
                   <h4>Evaluation metrics</h4>
                   <p>${safeCell(p.evaluation_metrics_raw)}</p>
@@ -319,6 +339,14 @@
       const metricsPills = metrics.length
         ? metrics.map(m => `<span class="pill">${escapeHtml(String(m))}</span>`).join("")
         : `<span class="pill">—</span>`;
+
+      const resumeBlock = normStr(p.resume)
+        ? `<p class="resume-text">${escapeHtml(p.resume)}</p>`
+        : `<p>—</p>`;
+
+      const sa2HowBlock = normStr(p.sa2_how)
+        ? `<p class="resume-text">${escapeHtml(p.sa2_how)}</p>`
+        : `<p>—</p>`;
 
       cards.push(`
         <article class="paper-card ${open ? "is-open" : ""}" data-card="${escapeHtml(id)}">
@@ -369,6 +397,15 @@
           </div>
 
           <div class="paper-card__details">
+            <div class="detail-card__box">
+              <h4>Résumé</h4>
+              ${resumeBlock}
+            </div>
+            <div class="detail-card__box">
+              <h4>SA2 — How?</h4>
+              ${sa2HowBlock}
+            </div>
+
             <div class="detail-card__box">
               <h4>Key contribution</h4>
               <p>${safeCell(p.key_contribution)}</p>
@@ -520,7 +557,10 @@
     try {
       const res = await fetch("papers.json", { cache: "no-store" });
       if (!res.ok) throw new Error(`Failed to load papers.json (${res.status})`);
-      const data = await res.json();
+      const json = await res.json();
+
+      // IMPORTANT: your file shape is { "papers": [...], "merge_report": {...} }
+      const data = Array.isArray(json) ? json : (Array.isArray(json.papers) ? json.papers : []);
 
       STATE.all = data.map((p) => ({
         ...p,
@@ -545,7 +585,11 @@
         evaluation_metrics: Array.isArray(p.evaluation_metrics) ? p.evaluation_metrics : [],
         key_contribution: normStr(p.key_contribution),
         main_limitation: normStr(p.main_limitation),
-        relevance_to_phd: normStr(p.relevance_to_phd)
+        relevance_to_phd: normStr(p.relevance_to_phd),
+
+        // NEW fields
+        resume: normStr(p.resume),
+        sa2_how: normStr(p.sa2_how)
       }));
 
       STATE.scenarios = deriveScenarios(STATE.all);
