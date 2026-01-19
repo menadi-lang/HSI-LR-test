@@ -1,4 +1,5 @@
-[
+{
+"papers": [
 {
 "paper": "HSI Survey — Kolling, 2015",
 "title": "HSI Survey",
@@ -21,7 +22,9 @@
 "evaluation_metrics": [],
 "key_contribution": "Maps HSI challenge space",
 "main_limitation": "No empirical validation",
-"relevance_to_phd": "Baseline gaps + framing"
+"relevance_to_phd": "Baseline gaps + framing",
+"id": "2015-kolling-human-interaction-with-robot-swarms-a-survey",
+"resume": "Scenario: survey of human–swarm interaction research and design issues across multiple swarm tasks and application domains. Human role: describes how a human can command, supervise, and collaborate with swarms under different communication and autonomy assumptions. Interface/support: synthesizes interaction modalities and information needs (e.g., global broadcast, intermittent intervention, environment-based control) and organizes challenges rather than proposing a single UI. Evaluation: systematic literature synthesis (taxonomy-style contribution), not a new experiment. Key claim: a structured view of interaction paradigms clarifies constraints and research gaps for scalable, safe human control of swarms."
 },
 {
 "paper": "Interface Insights — Wattearachchi, 2025",
@@ -42,10 +45,15 @@
 "model_based_support": "Conceptual",
 "interface_visualization": "UI variants; design factors",
 "evaluation_metrics_raw": "Time; errors",
-"evaluation_metrics": ["time", "errors"],
+"evaluation_metrics": [
+"time",
+"errors"
+],
 "key_contribution": "UI principles for performance",
 "main_limitation": "Limited scenarios",
-"relevance_to_phd": "Interface guidance for SA"
+"relevance_to_phd": "Interface guidance for SA",
+"id": "2025-wattearachchi-designing-effective-human-swarm-interaction-interfaces-insights-from-a-user-study-on-task-performance",
+"resume": "Scenario: empirical study that develops and tests a systematic method for designing human–swarm interaction interfaces. Human role: operator supervises and issues commands to a swarm to complete task goals under alternative interface designs. Interface/support: compares UI variants grounded in theoretical HSI insights and extracts concrete interface design insights tied to performance. Evaluation: controlled user study using task-performance measures (e.g., completion time and errors) and participant feedback to compare interface conditions. Key claim: specific interface elements measurably affect operator effectiveness, enabling evidence-based HSI interface design."
 },
 {
 "paper": "Runtime PFM — Abioye, 2025",
@@ -66,10 +74,15 @@
 "model_based_support": "Formal",
 "interface_visualization": "Prediction dashboard; alerts",
 "evaluation_metrics_raw": "Performance; TLX",
-"evaluation_metrics": ["performance", "TLX"],
+"evaluation_metrics": [
+"performance",
+"TLX"
+],
 "key_contribution": "PFM improves performance",
 "main_limitation": "SA2 not directly tested",
-"relevance_to_phd": "Formal projection support"
+"relevance_to_phd": "Formal projection support",
+"id": "2025-abioye-a-user-study-evaluation-of-predictive-formal-modelling-at-runtime-in-human-swarm-interaction",
+"resume": "Scenario: human–swarm mission supported by predictive formal modelling (PFM) executed at runtime as decision support. Human role: operator monitors mission state and makes control decisions while supervising a swarm. Interface/support: predictive outputs from formal models are presented to the operator during the mission to inform choices. Evaluation: user study comparing baseline control versus PFM-assisted control on performance and human–swarm interaction outcomes. Key claim: runtime predictive formal modelling can provide measurable benefits to mission performance and interaction quality in HSI."
 },
 {
 "paper": "Adaptive Training — Rockbach, 2020",
@@ -93,7 +106,9 @@
 "evaluation_metrics": [],
 "key_contribution": "Training necessity argument",
 "main_limitation": "No empirical study",
-"relevance_to_phd": "Training axis foundation"
+"relevance_to_phd": "Training axis foundation",
+"id": "2020-rockbach-on-the-importance-of-adaptive-operator-training-in-human-swarm-interaction",
+"resume": "Scenario: conceptual analysis of why adaptive operator training is critical for effective human–swarm interaction. Human role: operator must learn swarm dynamics and adapt strategies as mission complexity, automation levels, and swarm behavior change. Interface/support: focuses on training design considerations (what skills to build and how to adapt training) rather than a specific control interface. Evaluation: perspective and synthesis drawing on cognitive systems engineering and systems science; no controlled study reported. Key claim: training should be adaptive to the operator and context to prevent brittle performance and support robust HSI in complex missions."
 },
 {
 "paper": "MICAH Indicators — Hussein, 2022",
@@ -117,7 +132,9 @@
 "evaluation_metrics": [],
 "key_contribution": "MICAH indicator framework",
 "main_limitation": "No validation study",
-"relevance_to_phd": "Adaptive support features"
+"relevance_to_phd": "Adaptive support features",
+"id": "2022-hussein-characterization-of-indicators-for-adaptive-human-swarm-teaming",
+"resume": "Scenario: review that distills indicators needed to enable adaptive autonomy in human–swarm interaction. Human role: the human’s state (e.g., workload and other human factors) is treated as a key driver for adaptive teaming decisions. Interface/support: proposes the MICAH framework (Mission–Interaction–Complexity–Automation–Human) mapping primitive indicators an adaptive agent should monitor and reason over. Evaluation: literature synthesis and framework proposal; no direct user-study validation described. Key claim: explicitly characterizing mission, interaction, complexity, automation, and human indicators is necessary groundwork for adaptive human–swarm teaming."
 },
 {
 "paper": "Heatmap UI — Soorati, 2021",
@@ -138,10 +155,15 @@
 "model_based_support": "Conceptual",
 "interface_visualization": "Heatmap + controls",
 "evaluation_metrics_raw": "SUS; acceptance",
-"evaluation_metrics": ["SUS", "acceptance"],
+"evaluation_metrics": [
+"SUS",
+"acceptance"
+],
 "key_contribution": "Heatmap improves usability",
 "main_limitation": "No SA metrics",
-"relevance_to_phd": "Scalable visualization idea"
+"relevance_to_phd": "Scalable visualization idea",
+"id": "2021-soorati-designing-a-user-centered-interaction-interface-for-human-swarm-teaming",
+"resume": "Scenario: single-operator management of a large UAV swarm through a user-centered control interface. Human role: operator monitors the swarm and issues controls to manage many UAVs as a coherent team. Interface/support: interactive interface derived from user preferences; heat-map visualization of the swarm is highlighted as improving usability and acceptance. Evaluation: user studies including a 100-participant study and an additional complementary study to evaluate the interface and control mechanism. Key claim: representing the swarm as a heat map supports more usable and acceptable single-operator management of scalable UAV swarms."
 },
 {
 "paper": "AR Remote HSI — Sachidanandam, 2022",
@@ -162,10 +184,16 @@
 "model_based_support": "None",
 "interface_visualization": "AR overlay vs video",
 "evaluation_metrics_raw": "Performance; TLX; SUS",
-"evaluation_metrics": ["performance", "TLX", "SUS"],
+"evaluation_metrics": [
+"performance",
+"TLX",
+"SUS"
+],
 "key_contribution": "AR aids remote control",
 "main_limitation": "Simple tasks",
-"relevance_to_phd": "AR/MR modality evidence"
+"relevance_to_phd": "AR/MR modality evidence",
+"id": "2022-sachidanandam-effectiveness-of-augmented-reality-for-human-swarm-interactions",
+"resume": "Scenario: remote human–swarm interaction where a person controls a robot team through a video call, comparing AR versus non-AR interfaces. Human role: remote operator commands the robot team and monitors progress via the communication channel. Interface/support: a simple augmented-reality overlay interface is contrasted with an unaugmented baseline display. Evaluation: remote human user studies comparing the two interfaces on effectiveness and user experience during control. Key claim: AR-based interface support can improve remote HSI effectiveness relative to an unaugmented interface in the studied setting."
 },
 {
 "paper": "HotL Explanations — Agrawal, 2021",
@@ -186,10 +214,16 @@
 "model_based_support": "Conceptual",
 "interface_visualization": "Explanation panels; timelines",
 "evaluation_metrics_raw": "SAGAT; TLX; bias",
-"evaluation_metrics": ["SAGAT", "TLX", "bias"],
+"evaluation_metrics": [
+"SAGAT",
+"TLX",
+"bias"
+],
 "key_contribution": "Explanation-SA tradeoffs",
 "main_limitation": "Limited task realism",
-"relevance_to_phd": "SA2-focused explainability"
+"relevance_to_phd": "SA2-focused explainability",
+"id": "2021-agrawal-explaining-autonomous-decisions-in-swarms-of-human-on-the-loop-small-unmanned-aerial-systems",
+"resume": "Scenario: supervision of small UAV swarms where autonomous behaviors require explanations to maintain operator awareness in human-on-the-loop control. Human role: operator monitors multiple sUAS, stays aware of autonomy decisions, and intervenes when needed. Interface/support: analyzes UI trade-offs for providing timely versus detailed explanations and proposes a HotL multi-sUAS interface design with guidelines. Evaluation: multiple user studies with both inexperienced and expert operators assessing interface choices and their impact on awareness and interaction. Key claim: explanation timing and granularity materially affect operator awareness, motivating specific design guidelines for explanatory swarm interfaces."
 },
 {
 "paper": "Fan-Out Model — Perkins, 2025",
@@ -210,10 +244,16 @@
 "model_based_support": "Formal",
 "interface_visualization": "Minimal UI; timers",
 "evaluation_metrics_raw": "Fan-out; RMSE; performance",
-"evaluation_metrics": ["fan-out", "RMSE", "performance"],
+"evaluation_metrics": [
+"fan-out",
+"RMSE",
+"performance"
+],
 "key_contribution": "Separates human estimation",
 "main_limitation": "Artificial task constraints",
-"relevance_to_phd": "Scalability + cognition limits"
+"relevance_to_phd": "Scalability + cognition limits",
+"id": "2025-perkins-fan-out-revisited-the-impact-of-the-human-element-on-scalability-of-human-multi-robot-teams",
+"resume": "Scenario: scalability modeling for human multi-robot teams, revisiting fan-out to address limitations of prior neglect-time formulations. Human role: operator supervises multiple robots and forms estimates of how long each can operate without attention. Interface/support: introduces a fan-out model that decomposes neglect time into robot self-sufficient time and the human’s estimate of that self-sufficiency. Evaluation: model formulation and evaluation against existing modeling approaches to improve predictive accuracy. Key claim: explicitly separating robot capability from human estimation yields a more accurate scalability model for human–robot team supervision."
 },
 {
 "paper": "HORUS MR — Adekoya, 2025",
@@ -234,10 +274,17 @@
 "model_based_support": "Conceptual",
 "interface_visualization": "MR overlays; robot manager",
 "evaluation_metrics_raw": "SUS; TLX; SSQ; time",
-"evaluation_metrics": ["SUS", "TLX", "SSQ", "time"],
+"evaluation_metrics": [
+"SUS",
+"TLX",
+"SSQ",
+"time"
+],
 "key_contribution": "MR improves coordination",
 "main_limitation": "No SA metrics",
-"relevance_to_phd": "MR interface for training"
+"relevance_to_phd": "MR interface for training",
+"id": "2025-adekoya-horus-a-mixed-reality-interface-for-managing-teams-of-mobile-robots",
+"resume": "Scenario: user study where participants manage a team of mobile robots tasked with finding clues in an environment that simulates search-and-rescue. Human role: operator coordinates multiple robots either through team-level management or through individual robot teleoperation. Interface/support: HORUS provides a mixed-reality interface enabling full-team management and coordination, contrasted with teleoperation. Evaluation: experiments compare HORUS to teleoperation on task effectiveness and multi-robot coordination capability. Key claim: mixed-reality team-level interaction can increase versatility and effectiveness of multi-robot management compared with individual teleoperation."
 },
 {
 "paper": "SA+TP Framework — Wattearachchi, 2025",
@@ -258,10 +305,17 @@
 "model_based_support": "Conceptual",
 "interface_visualization": "Tablet grid; overlays",
 "evaluation_metrics_raw": "SAGAT; SART; distance",
-"evaluation_metrics": ["SAGAT", "SART", "distance"],
+"evaluation_metrics": [
+"SAGAT",
+"SART",
+"distance"
+],
 "key_contribution": "SA levels tied to TP",
 "main_limitation": "Single task",
-"relevance_to_phd": "SA evaluation backbone"
+"relevance_to_phd": "SA evaluation backbone",
+"id": "2025-wattearachchi-a-study-on-human-swarm-interaction-a-framework-for-assessing-situation-awareness-and-task-performance",
+"resume": "Scenario: single-target search in a dynamic grid where operators guide a robotic swarm and mark hazardous cells that the swarm does not know. Human role: operator directs swarm movement and provides hazard annotations during the search. Interface/support: tablet-based interface operationalizes the proposed framework and supports simultaneous measurement of SA and task performance. Evaluation: user study using subjective and objective SA measures; performance is quantified by how close robots are to the target. Key claim: the framework enables consistent HSI study design and links SA measurements to measurable search-task performance.",
+"sa2_how": "SA2 is supported by explicitly measuring comprehension-level situation awareness during the task using complementary subjective and objective SA instruments, not only perception or outcomes."
 },
 {
 "paper": "Two Types HSI — Kolling, 2013",
@@ -282,10 +336,15 @@
 "model_based_support": "Conceptual",
 "interface_visualization": "2D; selection vs beacon",
 "evaluation_metrics_raw": "Score; actions",
-"evaluation_metrics": ["score", "actions"],
+"evaluation_metrics": [
+"score",
+"actions"
+],
 "key_contribution": "Defines interaction paradigms",
 "main_limitation": "No SA instruments",
-"relevance_to_phd": "Baseline control primitives"
+"relevance_to_phd": "Baseline control primitives",
+"id": "2013-kolling-human-swarm-interaction-an-experimental-study-of-two-types-of-interaction-with-foraging-swarms",
+"resume": "Scenario: foraging swarm target-search comparing intermittent interaction and environmental interaction, instantiated as selection control and beacon control. Human role: operator steers the foraging swarm to find targets via direct selection actions or by placing environmental beacons. Interface/support: provides both control methods to study how different interaction structures shape swarm behavior and operator effectiveness. Evaluation: controlled experimental comparison of the two interaction types on foraging task performance. Key claim: fundamental differences between intermittent and environmental interaction lead to different operator strategies and performance in foraging control."
 },
 {
 "paper": "Limited SA HSI — Kapellmann, 2016",
@@ -306,10 +365,15 @@
 "model_based_support": "Conceptual",
 "interface_visualization": "Limited view; sensors",
 "evaluation_metrics_raw": "Cluster size; actions",
-"evaluation_metrics": ["cluster size", "actions"],
+"evaluation_metrics": [
+"cluster size",
+"actions"
+],
 "key_contribution": "Training helps under low SA",
 "main_limitation": "No SAGAT",
-"relevance_to_phd": "Training under constraints"
+"relevance_to_phd": "Training under constraints",
+"id": "2016-kapellmann-zafra-human-robot-swarm-interaction-with-limited-situational-awareness",
+"resume": "Scenario: simulated human–swarm collaboration when the operator’s situational awareness is intentionally limited. Human role: operator must decide how to influence the swarm while lacking full visibility of swarm and environment state. Interface/support: investigates interaction under constrained feedback, focusing on how the available information and controls shape collaboration. Evaluation: simulation-based study assessing task outcomes and interaction behavior in limited-awareness conditions. Key claim: limited situational awareness substantially changes how operators can collaborate with swarms, motivating interaction designs robust to partial observability."
 },
 {
 "paper": "HST3 Architecture — Hepworth, 2021",
@@ -333,7 +397,10 @@
 "evaluation_metrics": [],
 "key_contribution": "Links transparency to SA",
 "main_limitation": "No implementation",
-"relevance_to_phd": "SA+trust design scaffold"
+"relevance_to_phd": "SA+trust design scaffold",
+"id": "2021-hepworth-human-swarm-teaming-transparency-and-trust-architecture",
+"resume": "Scenario: conceptual work proposing an architecture that links transparency to trustworthy human–swarm teaming. Human role: operator requires transparency to maintain situational awareness and properly calibrate trust in swarm autonomy. Interface/support: defines transparency as overarching and organizes interpretability, explainability, and predictability within the HST3-Architecture. Evaluation: definition-driven synthesis and architecture proposal; no empirical evaluation is described in the provided summary. Key claim: structuring transparency mechanisms is a prerequisite for situation awareness and thus for effective, trustworthy human–swarm teaming. It emphasizes transparency mechanisms across system and UI layers.",
+"sa2_how": "SA2 is supported by prioritizing transparency content that conveys meaning, intent, and predictability of swarm behavior so the human can understand what is happening and why."
 },
 {
 "paper": "Hybrid MR Arch — Zheng, 2023",
@@ -354,10 +421,15 @@
 "model_based_support": "Formal",
 "interface_visualization": "MR sand-table; overlays",
 "evaluation_metrics_raw": "Latency; demos",
-"evaluation_metrics": ["latency", "demos"],
+"evaluation_metrics": [
+"latency",
+"demos"
+],
 "key_contribution": "Hybrid MR swarm platform",
 "main_limitation": "No human study",
-"relevance_to_phd": "Testbed for training"
+"relevance_to_phd": "Testbed for training",
+"id": "2023-zheng-integrated-system-architecture-with-mixed-reality-user-interface-for-virtual-physical-hybrid-swarm-simulations",
+"resume": "Scenario: hybrid robotic swarm architecture that combines virtual and physical components into a virtual–physical simulation system. Human role: operator interacts with the hybrid swarm and monitors both virtual and physical elements during experimentation. Interface/support: mixed-reality devices provide an MR user interface integrated into the system architecture to enable human–swarm interaction. Evaluation: system architecture and prototype demonstration emphasizing integration; no user-study metrics are stated in the provided summary. Key claim: integrating MR interaction with virtual–physical hybrid swarm simulation broadens experimental capability for HSI and swarm system development."
 },
 {
 "paper": "Influence Moderation — Ashcraft, 2019",
@@ -378,10 +450,14 @@
 "model_based_support": "Conceptual",
 "interface_visualization": "2D beacon influence UI",
 "evaluation_metrics_raw": "Best-site rate",
-"evaluation_metrics": ["best-site rate"],
+"evaluation_metrics": [
+"best-site rate"
+],
 "key_contribution": "Optimal influence moderation",
 "main_limitation": "IVAM weak generalization",
-"relevance_to_phd": "Safe influence strategies"
+"relevance_to_phd": "Safe influence strategies",
+"id": "2019-ashcraft-moderating-operator-influence-in-human-swarm-systems",
+"resume": "Scenario: simulated human–swarm system inspired by honeybees, used to study how to moderate human influence over swarm outcomes. Human role: operator interacts with the swarm under different designs that constrain or shape the impact of human inputs. Interface/support: implements multiple moderation methods that regulate how operator commands affect the swarm, aiming to prevent harmful over-influence. Evaluation: simulation study comparing mission success across influence-moderation approaches using the same swarm task. Key claim: appropriately moderating human influence can improve overall system success, suggesting design principles for balancing guidance and swarm autonomy."
 },
 {
 "paper": "Immersion+Prediction — Roldán, 2017",
@@ -402,10 +478,17 @@
 "model_based_support": "Formal",
 "interface_visualization": "2D/VR + prediction",
 "evaluation_metrics_raw": "SAGAT; TLX; collisions",
-"evaluation_metrics": ["SAGAT", "TLX", "collisions"],
+"evaluation_metrics": [
+"SAGAT",
+"TLX",
+"collisions"
+],
 "key_contribution": "Prediction boosts SA3",
 "main_limitation": "Small teams",
-"relevance_to_phd": "Predictive UI evidence"
+"relevance_to_phd": "Predictive UI evidence",
+"id": "2017-rold-n-multi-robot-interfaces-and-operator-situational-awareness-study-of-the-impact-of-immersion-and-prediction",
+"resume": "Scenario: multi-robot operation comparing four interfaces that vary immersion (VR vs conventional) and prediction (predictive vs non-predictive). Human role: operator controls and supervises multiple robots while maintaining situational awareness. Interface/support: implements conventional, predictive conventional, VR, and predictive VR interfaces, emphasizing multimodal interaction, immersion, and predictive capabilities. Evaluation: comparative study focusing on operator situational awareness under the four interface designs. Key claim: immersion and prediction features are key levers for improving operator situational awareness in multi-robot control interfaces. It also discusses adaptive displays combining immersion and prediction.",
+"sa2_how": "SA2 is supported by predictive interface elements and immersive context that help the operator interpret robot states and their implications, supporting comprehension beyond raw perception."
 },
 {
 "paper": "xSwarm Space — Naiseh, 2023",
@@ -426,10 +509,14 @@
 "model_based_support": "Conceptual",
 "interface_visualization": "Explanation requirements taxonomy",
 "evaluation_metrics_raw": "Expert survey",
-"evaluation_metrics": ["expert survey"],
+"evaluation_metrics": [
+"expert survey"
+],
 "key_contribution": "Defines xSwarm questions",
 "main_limitation": "No implementation",
-"relevance_to_phd": "Explainability requirements"
+"relevance_to_phd": "Explainability requirements",
+"id": "2023-naiseh-outlining-the-design-space-of-explainable-swarm",
+"resume": "Scenario: requirements study on explainability for swarm robotics, targeting safety-critical contexts where humans must control and monitor swarms. Human role: operator needs answers and explanations to support trustworthy supervision and intervention. Interface/support: frames the xSwarm design space by identifying what questions an explainable swarm should answer and what types of explanations it should generate. Evaluation: survey of 26 swarm experts to elicit explainability requirements and challenges in producing explanations. Key claim: current HSI literature lacks foundational explainability requirements, and expert-elicited needs can guide development of explainable swarm systems."
 },
 {
 "paper": "SAT Model — Chen, 2018",
@@ -450,10 +537,17 @@
 "model_based_support": "Formal",
 "interface_visualization": "Transparency level displays",
 "evaluation_metrics_raw": "SAGAT; trust; TLX",
-"evaluation_metrics": ["SAGAT", "trust", "TLX"],
+"evaluation_metrics": [
+"SAGAT",
+"trust",
+"TLX"
+],
 "key_contribution": "Transparency→SA→trust link",
 "main_limitation": "Not swarm-specific",
-"relevance_to_phd": "Theory for SA+trust"
+"relevance_to_phd": "Theory for SA+trust",
+"id": "2018-chen-situation-awareness-based-agent-transparency-and-human-autonomy-teaming-effectiveness",
+"resume": "Scenario: extension of the Situation Awareness-based Agent Transparency (SAT) model to support advanced human–autonomy teaming paradigms. Human role: human teammate must maintain appropriate understanding and calibrated trust in agent judgment as autonomy becomes a teammate. Interface/support: argues for bidirectional transparency and illustrates the model in three programs (autonomous squad member, mediator for multiple robots, plan recommendation agent). Evaluation: review of the model’s application across these programs to demonstrate utility, not a single new experiment. Key claim: SAT remains effective for facilitating shared understanding and trust calibration, and its extension better supports teamwork with autonomous teammates.",
+"sa2_how": "SA2 is supported by SAT’s guidance to communicate the meaning and implications of agent state and intent, enabling human comprehension rather than only exposing raw data."
 },
 {
 "paper": "Runtime Verification — Gu, 2023",
@@ -474,10 +568,15 @@
 "model_based_support": "Formal",
 "interface_visualization": "Feasibility dashboard; what-if",
 "evaluation_metrics_raw": "Accuracy; runtime",
-"evaluation_metrics": ["accuracy", "runtime"],
+"evaluation_metrics": [
+"accuracy",
+"runtime"
+],
 "key_contribution": "Runtime CTMC for SA3",
 "main_limitation": "No user study",
-"relevance_to_phd": "Digital twin prediction axis"
+"relevance_to_phd": "Digital twin prediction axis",
+"id": "2023-gu-successful-swarms-operator-situational-awareness-with-modelling-and-verification-at-runtime",
+"resume": "Scenario: runtime probabilistic modelling and verification used as formal-methods support to aid operator situational awareness in swarm missions. Human role: operator monitors the system and considers decisions using current and predictive success information. Interface/support: probabilistic models compute task and mission success probabilities; statistical model checking provides timely approximate predictions and enables what-if exploration before acting. Evaluation: reports prediction performance (timeliness and approximation accuracy) and implements approaches to display outputs to operators. Key claim: runtime formal verification can provide actionable insight into current and future mission success to support better operator decisions."
 },
 {
 "paper": "OODA Framework — Zhou, 2025",
@@ -498,10 +597,16 @@
 "model_based_support": "Conceptual",
 "interface_visualization": "Dual-screen GCS; templates",
 "evaluation_metrics_raw": "SUS; interviews",
-"evaluation_metrics": ["SUS", "interviews"],
+"evaluation_metrics": [
+"SUS",
+"interviews"
+],
 "key_contribution": "OODA-based HSI principles",
 "main_limitation": "No SA metrics",
-"relevance_to_phd": "Workflow design guidance"
+"relevance_to_phd": "Workflow design guidance",
+"id": "2025-zhou-towards-human-centered-interaction-with-uav-swarms-framework-system-design-and-user-study",
+"resume": "Scenario: single-operator control of more than 20 UAVs using a human-centered HSI framework grounded in the OODA cognitive model. Human role: operator follows observe–orient–decide–act workflows to manage UAV swarm missions while limiting cognitive load. Interface/support: six HSI-adapted design principles guide system development across interaction workflows, interface layout, and task representation mechanisms in a prototype. Evaluation: user studies evaluating usability, interaction efficiency, and cognitive support; results suggest reduced cognitive load and improved control performance with remaining UI refinements needed. Key claim: an OODA-grounded framework can guide interface design that supports scalable, cognitively manageable UAV swarm supervision.",
+"sa2_how": "SA2 is supported by the OODA ‘orient’ stage operationalized in the interface workflow and task representations, aiming to improve operator understanding before decisions and actions."
 },
 {
 "paper": "SA Training Proposal — Stensrud, 2024",
@@ -522,10 +627,16 @@
 "model_based_support": "Conceptual",
 "interface_visualization": "GCS updates; mode switching",
 "evaluation_metrics_raw": "Proposed: SA; trust; perf",
-"evaluation_metrics": ["proposed: SA", "trust", "performance"],
+"evaluation_metrics": [
+"proposed: SA",
+"trust",
+"performance"
+],
 "key_contribution": "SA training for complexity",
 "main_limitation": "Proposal only",
-"relevance_to_phd": "SA3 training direction"
+"relevance_to_phd": "SA3 training direction",
+"id": "2024-stensrud-situation-awareness-training-as-a-prerequisite-for-handling-complexity-in-human-autonomy-teaming-demonstration-and-experiment-proposal",
+"resume": "Scenario: human–autonomy teaming under high complexity where time pressure, task load, and fatigue hinder forming sound predictions. Human role: soldiers/operators collaborate with an uncrewed swarm system for ISR and must adjust collaboration mode as the environment changes. Interface/support: proposes preparation and training to empower humans to make projections and manage collaboration, and outlines non-interventional and interventional techniques for studying SA in teams operating the UxS. Evaluation: demonstration and experiment proposal rather than completed study; intended measures are described conceptually in the paper summary. Key claim: situation awareness training is a prerequisite for handling complexity in human–autonomy teams and for effective joint projection of future events."
 },
 {
 "paper": "SwarmControl Online — Becker, 2014",
@@ -546,10 +657,16 @@
 "model_based_support": "None",
 "interface_visualization": "Web game; 2D",
 "evaluation_metrics_raw": "Time; success; logs",
-"evaluation_metrics": ["time", "success", "logs"],
+"evaluation_metrics": [
+"time",
+"success",
+"logs"
+],
 "key_contribution": "Crowdsourced HSI at scale",
 "main_limitation": "No SA/trust",
-"relevance_to_phd": "Large-N evaluation method"
+"relevance_to_phd": "Large-N evaluation method",
+"id": "2014-becker-crowdsourcing-swarm-manipulation-experiments-a-massive-online-user-study-with-large-swarms-of-simple-robots",
+"resume": "Scenario: massive online user study using SwarmControl.net, where players steer swarms of up to 500 robots in manipulation challenges. Human role: remote users act as swarm operators, learning strategies to control large robot populations through the game interface. Interface/support: web-based game framework designed for large-scale HSI experiments and released as an open-source tool for running swarm manipulation studies. Evaluation: logs and analyzes statistics from thousands of players to study large-population control behaviors and pitfalls. Key claim: crowdsourced online games can enable unprecedented scale in swarm-manipulation experimentation and produce data useful for both human control insights and automatic controller design."
 },
 {
 "paper": "SHMM Updates — Swaminathan, 2025",
@@ -570,10 +687,15 @@
 "model_based_support": "Formal",
 "interface_visualization": "Selective state update UI",
 "evaluation_metrics_raw": "Simulation; proposed SAGAT",
-"evaluation_metrics": ["simulation", "proposed SAGAT"],
+"evaluation_metrics": [
+"simulation",
+"proposed SAGAT"
+],
 "key_contribution": "Mental-model-triggered comms",
 "main_limitation": "No user study",
-"relevance_to_phd": "Mental-model-based support"
+"relevance_to_phd": "Mental-model-based support",
+"id": "2025-swaminathan-use-of-simulated-mental-models-and-real-time-planning-for-human-robot-interaction",
+"resume": "Scenario: human–robot interaction when continuous monitoring is unavailable, requiring selective communication about state and plans. Human role: operator maintains a mental model of world state and robot plans and risks divergence from the robot’s actual state. Interface/support: framework estimates the operator’s mental model and compares it with the true world state and robot plans; mismatches trigger selective communication updates. Evaluation: presents a planning and communication framework; specific user-study metrics are not stated in the provided summary. Key claim: explicitly modelling and tracking the operator’s mental model enables targeted communication that can reduce unnecessary updates while keeping the human aligned with real-time robot planning."
 },
 {
 "paper": "OFFSET Field Study — Adams, 2024",
@@ -594,10 +716,15 @@
 "model_based_support": "None",
 "interface_visualization": "VR C2; multi-panels",
 "evaluation_metrics_raw": "Workload alg; probes",
-"evaluation_metrics": ["workload algorithm", "probes"],
+"evaluation_metrics": [
+"workload algorithm",
+"probes"
+],
 "key_contribution": "Field proof of scale",
 "main_limitation": "Few expert operators",
-"relevance_to_phd": "Realism + workload baseline"
+"relevance_to_phd": "Realism + workload baseline",
+"id": "2024-adams-can-a-single-human-supervise-a-swarm-of-100-heterogeneous-robots",
+"resume": "Scenario: DARPA OFFSET program field exercises at urban training sites assessing single-operator supervision of a heterogeneous swarm of 100 robots in real-world missions. Human role: swarm commander deploys and supervises the heterogeneous swarm during challenging operational missions. Interface/support: uses the CCAST integrator team’s command-and-control setup to manage the swarm (specific UI elements are not detailed in the provided summary). Evaluation: collects objective and subjective human-performance metrics and analyzes workload using a multi-dimensional workload algorithm with an overload threshold. Key claim: despite workload frequently exceeding overload thresholds, the swarm commander successfully completed missions, demonstrating feasibility of single-human supervision for 100 heterogeneous robots in real-world conditions."
 },
 {
 "paper": "VR Drone UI Eval — Sweetland, 2025",
@@ -618,10 +745,16 @@
 "model_based_support": "None",
 "interface_visualization": "VR map; modes; status",
 "evaluation_metrics_raw": "SART; SUS; SSQ",
-"evaluation_metrics": ["SART", "SUS", "SSQ"],
+"evaluation_metrics": [
+"SART",
+"SUS",
+"SSQ"
+],
 "key_contribution": "VR rapid UI evaluation",
 "main_limitation": "Very small N",
-"relevance_to_phd": "VR eval pipeline"
+"relevance_to_phd": "VR eval pipeline",
+"id": "2025-sweetland-virtual-reality-for-the-evaluation-of-drone-swarm-control-systems-and-user-interfaces",
+"resume": "Scenario: VR-based evaluation of drone swarm control systems and interfaces in a virtual search-and-rescue operation. Human role: participant controls a drone swarm through candidate control systems while performing SAR tasks in VR. Interface/support: VR environment supports user-centered design and rapid prototyping of drone swarm behaviors and control interfaces. Evaluation: situational awareness measured with SART, usability measured with SUS (for VR system and control systems), simulator sickness measured with SSQ, plus performance metrics and qualitative feedback. Key claim: VR is a viable platform for evaluating swarm control systems and interfaces with complementary SA, performance, usability, and comfort measures."
 },
 {
 "paper": "Neglect Benevolence — Walker, 2012",
@@ -642,10 +775,16 @@
 "model_based_support": "Formal",
 "interface_visualization": "Predictive shadows on map",
 "evaluation_metrics_raw": "Targets; time; ANOVA",
-"evaluation_metrics": ["targets", "time", "ANOVA"],
+"evaluation_metrics": [
+"targets",
+"time",
+"ANOVA"
+],
 "key_contribution": "Defines neglect benevolence",
 "main_limitation": "No SA/trust metrics",
-"relevance_to_phd": "Timing rules for training"
+"relevance_to_phd": "Timing rules for training",
+"id": "2012-walker-neglect-benevolence-in-human-control-of-swarms-in-the-presence-of-latency",
+"resume": "Scenario: swarm foraging under feedback latency, examining how delayed swarm-state feedback affects control and whether predictive displays mitigate it. Human role: operator commands the swarm to find targets and must decide when to intervene versus allowing swarm behaviors to stabilize. Interface/support: compares conditions with and without a predictive display and introduces ‘neglect benevolence’ to capture benefits of waiting for stabilization before issuing new commands. Evaluation: controlled study measuring target-search task performance across latency and display conditions and analyzing emergent operator strategies. Key claim: predictive displays can reduce negative latency effects, and operators exploit neglect benevolence through different but successful control strategies."
 },
 {
 "paper": "Two Types Study — Kolling, 2012",
@@ -666,10 +805,15 @@
 "model_based_support": "Conceptual",
 "interface_visualization": "2D; selection vs beacons",
 "evaluation_metrics_raw": "Score; ANOVA",
-"evaluation_metrics": ["score", "ANOVA"],
+"evaluation_metrics": [
+"score",
+"ANOVA"
+],
 "key_contribution": "Paradigm comparison baseline",
 "main_limitation": "No SA instruments",
-"relevance_to_phd": "Redundant baseline reference"
+"relevance_to_phd": "Redundant baseline reference",
+"id": "2012-kolling-human-swarm-interaction-an-experimental-study-of-two-types-of-interaction-with-foraging-swarms",
+"resume": "Scenario: foraging swarm target-search comparing intermittent interaction and environmental interaction, implemented as selection control and beacon control. Human role: operator directs the swarm to locate targets by selecting entities/actions or by placing beacons that influence collective motion. Interface/support: experimental interface exposes both control paradigms so the same task can be performed under different interaction structures. Evaluation: controlled experiment comparing interaction types on foraging task performance and operator behavior. Key claim: interaction structure (selection vs beacon) shapes successful strategies and provides evidence that intermittent and environmental control support different forms of effective human–swarm coordination."
 },
 {
 "paper": "VR Training Sim — Eraslan, 2025",
@@ -690,9 +834,23 @@
 "model_based_support": "None",
 "interface_visualization": "VR 3D; joystick; HUD",
 "evaluation_metrics_raw": "SART; TLX; logs",
-"evaluation_metrics": ["SART", "TLX", "logs"],
+"evaluation_metrics": [
+"SART",
+"TLX",
+"logs"
+],
 "key_contribution": "Training-first VR simulator",
 "main_limitation": "Limited validation",
-"relevance_to_phd": "VR training testbed"
+"relevance_to_phd": "VR training testbed",
+"id": "2025-eraslan-toward-human-centered-swarm-control-a-vr-based-uav-simulator-for-training-and-cognitive-evaluation",
+"resume": "Scenario: VR-based UAV simulator for immersive training and cognitive evaluation in rescue and emergency missions using a leader–follower drone setup. Human role: trainee/operator pilots a lead drone via VR headset and joystick while autonomous drones maintain geometric formations with sensing and obstacle avoidance. Interface/support: immersive VR training environment couples human piloting with autonomy-managed formation control to practice swarm leadership. Evaluation: simulator is presented for training and human-factors assessment; specific quantitative study outcomes are not stated in the provided summary. Key claim: an immersive VR simulator can support operator training and cognitive evaluation for UAV swarm control in safety-relevant mission contexts."
 }
-]
+],
+"merge_report": {
+"old_count": 29,
+"resume_count": 29,
+"matched": 29,
+"unmatched_old": [],
+"unmatched_resumes": []
+}
+}
