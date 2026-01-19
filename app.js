@@ -555,44 +555,41 @@
     bindControls();
 
     try {
-      const res = await fetch("papers.json", { cache: "no-store" });
-      if (!res.ok) throw new Error(`Failed to load papers.json (${res.status})`);
-      const json = await res.json();
+   const res = await fetch("papers.json", { cache: "no-store" });
+if (!res.ok) throw new Error(`Failed to load papers.json (${res.status})`);
+const data = await res.json();
 
-      // IMPORTANT: your file shape is { "papers": [...], "merge_report": {...} }
-      const data = Array.isArray(json) ? json : (Array.isArray(json.papers) ? json.papers : []);
+const rows = Array.isArray(data) ? data : (Array.isArray(data.papers) ? data.papers : []);
+if (!rows.length) throw new Error("papers.json loaded but contains no papers array");
 
-      const rows = Array.isArray(data) ? data : (Array.isArray(data.papers) ? data.papers : []);
-      STATE.all = rows.map((p) => ({
+STATE.all = rows.map((p) => ({
+  ...p,
+  paper: normStr(p.paper),
+  title: normStr(p.title),
+  authors: normStr(p.authors),
+  year: p.year ?? null,
+  scenario_domain: normStr(p.scenario_domain),
+  swarm_type: normStr(p.swarm_type),
+  human_role: normStr(p.human_role),
+  sa1: p.sa1 === true,
+  sa2: p.sa2 === true,
+  sa3: p.sa3 === true,
+  sa1_rating: normStr(p.sa1_rating),
+  sa2_rating: normStr(p.sa2_rating),
+  sa3_rating: normStr(p.sa3_rating),
+  training_included: p.training_included === true ? true : (p.training_included === false ? false : null),
+  training_type: normStr(p.training_type),
+  model_based_support: normStr(p.model_based_support),
+  interface_visualization: normStr(p.interface_visualization),
+  evaluation_metrics_raw: normStr(p.evaluation_metrics_raw),
+  evaluation_metrics: Array.isArray(p.evaluation_metrics) ? p.evaluation_metrics : [],
+  key_contribution: normStr(p.key_contribution),
+  main_limitation: normStr(p.main_limitation),
+  relevance_to_phd: normStr(p.relevance_to_phd),
+  resume: normStr(p.resume),
+  sa2_how: normStr(p.sa2_how)
+}));
 
-        ...p,
-        paper: normStr(p.paper),
-        title: normStr(p.title),
-        authors: normStr(p.authors),
-        year: p.year ?? null,
-        scenario_domain: normStr(p.scenario_domain),
-        swarm_type: normStr(p.swarm_type),
-        human_role: normStr(p.human_role),
-        sa1: p.sa1 === true,
-        sa2: p.sa2 === true,
-        sa3: p.sa3 === true,
-        sa1_rating: normStr(p.sa1_rating),
-        sa2_rating: normStr(p.sa2_rating),
-        sa3_rating: normStr(p.sa3_rating),
-        training_included: p.training_included === true ? true : (p.training_included === false ? false : null),
-        training_type: normStr(p.training_type),
-        model_based_support: normStr(p.model_based_support),
-        interface_visualization: normStr(p.interface_visualization),
-        evaluation_metrics_raw: normStr(p.evaluation_metrics_raw),
-        evaluation_metrics: Array.isArray(p.evaluation_metrics) ? p.evaluation_metrics : [],
-        key_contribution: normStr(p.key_contribution),
-        main_limitation: normStr(p.main_limitation),
-        relevance_to_phd: normStr(p.relevance_to_phd),
-
-        // NEW fields
-        resume: normStr(p.resume),
-        sa2_how: normStr(p.sa2_how)
-      }));
 
       STATE.scenarios = deriveScenarios(STATE.all);
       buildScenarioList();
@@ -620,4 +617,5 @@
 
   load();
 })();
+
 
