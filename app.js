@@ -562,7 +562,9 @@
       // IMPORTANT: your file shape is { "papers": [...], "merge_report": {...} }
       const data = Array.isArray(json) ? json : (Array.isArray(json.papers) ? json.papers : []);
 
-      STATE.all = data.map((p) => ({
+      const rows = Array.isArray(data) ? data : (Array.isArray(data.papers) ? data.papers : []);
+      STATE.all = rows.map((p) => ({
+
         ...p,
         paper: normStr(p.paper),
         title: normStr(p.title),
@@ -618,3 +620,4 @@
 
   load();
 })();
+
